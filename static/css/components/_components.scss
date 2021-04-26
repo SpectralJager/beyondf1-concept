@@ -1,0 +1,21 @@
+.btn{
+    @include font-title;
+    padding: 0.2rem 1rem;
+    color: $honeydew;
+    background-color: $imperial-red;
+    border-radius: 5px;
+}
+
+@mixin bg-img($img_url, $color) {
+    background-image: url($img_url);
+    background-color: $color;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
+    
+}
+
+@mixin card {
+    width: 100%;
+    height: 600px;
+}

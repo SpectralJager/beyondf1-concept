@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}">
+    {% block links %}{% endblock %}
+    <script src="https://kit.fontawesome.com/4172a26327.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Beyond<span class='color-red'>F1</span></h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Wiki</a>
+            <a href="#">Contacts</a>
+        </nav>
+        <div class="bottom">
+            <span class="subscribe">Subscribe for updates</span>
+            <form method="POST">
+                <input type="email" name="email" id="email" placeholder="Enter your email">
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form>
+            <img src="#" alt="Created by Terref" class="logo">
+        </div>
+    </header>
+    <main>
+        {% block content %}
+        <p>Nothing here</p>
+        {% endblock %}
+    </main>
+</body>
+</html>

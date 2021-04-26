@@ -1,0 +1,27 @@
+.article{
+    @include card;
+    .img{
+        height: 50%;
+        @include bg-img('/static/img/news-img.jpg', none )
+    }
+    .content{
+        width: 100%;
+        height: 50%;
+        padding: 30px 10% 0 10%;
+        h2{
+            @include font-title;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        span{
+            font-size: 0.8rem;
+            @include font-third;
+            font-weight: 300;
+        }
+        p{  
+            font-size: 1rem;
+            @include font-second;
+            margin: 1rem 0;
+        }
+    }
+}
