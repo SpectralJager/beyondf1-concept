@@ -1,3 +1,5 @@
+//imports
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Open+Sans:wght@300;400;700;800&family=Oswald:wght@300;400;500;700&display=swap');
 //colors
 $prussian-blue: #1D3557;
 $celadon-blue: #457B9D;
@@ -5,23 +7,27 @@ $powder-blue: #A8DADC;
 $honeydew: #F1FAEE;
 $imperial-red: #E63946;
 $rosso-corsa: #D00000;
+$dark-red: #9D0208;
 $xiketic: #03071E;
 //fonts
-$fs-big: clamp(2rem, 100%, 4rem);
+$fs-big: 2rem;
 $fs-med: 1.5rem;
 $fs-sm: 1rem;
 // mixins
 @mixin font-title($size){
     font-size: $size;
+    font-family: "Oswald";
     font-weight: 700;
 }
 @mixin font-content($size){
     font-size: $size;
-    font-weight: 500;
+    font-family: 'Open Sans';
+    font-weight: 400;
 }
 @mixin font-discription($size){
     font-size: $size;
-    font-weight: 300;
+    font-family: "Lato";
+    font-weight: 200;
 }
 @mixin bg-img($img, $color) {
     background-image: url($img);
@@ -53,7 +59,7 @@ body{
         grid-template-columns: 360px auto;
     }
 }
-main{
+.home{
     display: grid;
     grid-template-columns: auto;
     @media (min-width: 720px){
@@ -68,14 +74,14 @@ a{
     display: inline-block;
     padding: 0.3rem 0.7rem;
     margin: .5rem 0;
-    background-color: $imperial-red;
+    background: linear-gradient($imperial-red, $rosso-corsa);
     color: $honeydew;
     border-radius: 0.3rem;
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    transition: background-color .2s linear;
-    &:hover{
-        background-color: $rosso-corsa;
+    transition: all .2s linear;
+    &:hover, &:focus{
+        background: linear-gradient($rosso-corsa, $dark-red);
     }
 }
 .font-red{
@@ -86,7 +92,7 @@ header{
     height: 768px;
     @include bg-img('/img/header-bg.jpg', $prussian-blue);
     color: $honeydew;
-    padding: 4rem 15% 0 15%;
+    padding: 4rem 10% 0 10%;
     position: relative;
     .title{
         @include font-title($fs-big);
@@ -105,7 +111,7 @@ header{
             border-radius: 0.5rem;
             box-shadow: none;
             transition: all .4s linear;
-            &:hover{
+            &:hover, &:focus{
                 background-color: $imperial-red;
                 box-shadow: 3px 3px 10px $rosso-corsa;
             }
@@ -116,7 +122,7 @@ header{
         bottom: 2rem;
         width: 70%;
         .sub-text{
-            @include font-content($fs-med);
+            @include font-content($fs-sm);
         }
         form{
             position: relative;
@@ -158,6 +164,23 @@ header{
                 transition: color .2s linear;
             }
         }
+        .links{
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap:2rem;
+            font-size: $fs-med;
+            color: $honeydew;
+            svg{
+                cursor: pointer;
+                transition: color .2s linear;
+                &:hover{
+                    color: $imperial-red;
+                }
+            }
+        }
     }
     @media (min-width: 720px){
         position: sticky;
@@ -190,7 +213,7 @@ header{
             }
         }
         transition: all .3s linear;
-        &:hover{
+        &:hover, &:focus-within{
             background-color: $xiketic;
         }
     }
@@ -225,7 +248,7 @@ header{
         }
     }
     transition: all .3s linear;
-    &:hover{
+    &:hover, &:focus-within{
         background-color: $prussian-blue;
         .img{
             height: 40%;
@@ -240,6 +263,52 @@ header{
         }
     }
 }
+
+.info{
+    .season{
+        width: 100%;
+        height: 300px;
+        color: $honeydew;
+        padding: 5% 10%;
+        @include bg-img('/img/seasons-bg.png', gray);
+        .title{
+            @include font-title($fs-big);
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            
+        }
+        .content{
+            display: flex;
+            height: 80%;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10%;
+            @include font-content($fs-sm);
+        }
+    }
+    .container{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        .extra{
+            height: 150px;
+            color: $honeydew;
+            padding: 5% 10%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            text-align: center
+        }
+        .tech{
+            @include bg-img('/img/tech-bg.jpg', $powder-blue);
+        }
+        .score{
+            @include bg-img('/img/results.jpg', gray);
+        }
+    }
+}
+
 .intro{
     display: none;
 }
