@@ -1,0 +1,180 @@
+//colors
+$prussian-blue: #1D3557;
+$celadon-blue: #457B9D;
+$powder-blue: #A8DADC;
+$honeydew: #F1FAEE;
+$imperial-red: #E63946;
+$xiketic: #03071E;
+//fonts
+$fs-big: clamp(2rem, 50%, 4rem);
+$fs-med: 1.5rem;
+$fs-sm: 1rem;
+// mixins
+@mixin font-title($size){
+    font-size: $size;
+    font-weight: 700;
+}
+@mixin font-content($size){
+    font-size: $size;
+    font-weight: 500;
+}
+@mixin font-discription($size){
+    font-size: $size;
+    font-weight: 300;
+}
+@mixin bg-img($img, $color) {
+    background-image: url($img);
+    background-color: $color;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
+}
+@mixin card {
+    width: 100%;
+    height: 648px;
+}
+
+//css
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    display: grid;
+    grid-template-columns: minmax(360px,1fr);
+    @media (min-width: 720px){
+        grid-template-columns: 360px auto;
+    }
+}
+main{
+    display: grid;
+    grid-template-columns: auto;
+    @media (min-width: 720px){
+        grid-template-columns: repeat(auto-fill,minmax(360px,1fr));
+    }
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+.btn{
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    margin: .5rem 0;
+    background-color: $imperial-red;
+    color: $honeydew;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+.font-red{
+    color: $imperial-red;
+}
+header{
+    width: 100%;
+    height: 768px;
+    @include bg-img('/img/header-bg.jpg', $prussian-blue);
+    color: $honeydew;
+    padding: 4rem 15% 0 15%;
+    position: relative;
+    .title{
+        @include font-title($fs-big);
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+    }
+    .navigation{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        @include font-content($fs-med);
+    }
+    .bottom-content{
+        position: absolute;
+        bottom: 2rem;
+        width: 70%;
+        .sub-text{
+            @include font-content($fs-med);
+        }
+        form{
+            position: relative;
+            margin: 1rem 0;
+            #email{
+                width: 100%;
+                height: 3rem;
+                padding: .5rem 2rem .5rem 1rem;
+                @include font-discription($fs-sm);
+                color: $honeydew;
+                background: transparent;
+                outline: .5px solid $prussian-blue;
+            }
+            button{
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                border: none;
+                background: transparent;
+                color: $honeydew;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.event{
+    @include card();
+    &__item{
+        width: 100%;
+        height: 50%;
+        @include bg-img('/img/gp-bg.jpg', $celadon-blue);
+        color: $honeydew;
+        padding: 1.5rem 10%;
+        .title{
+            @include font-title($fs-med);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .content{
+            display: grid;
+            align-items: center;
+            grid-template-columns: auto 100px;
+            gap: 1rem;
+            @include font-content($fs-sm);
+            .meta{
+                text-align: center;
+            }
+        }
+        
+    }
+}
+.article{
+    @include card();
+    border: 1px solid $xiketic;
+    .img{
+        @include bg-img('/img/news-img.jpg', none );
+        width: 100%;
+        height: 50%;
+    }
+    .content{
+        position: relative;
+        width: 100%;
+        height: 50%;
+        padding: 1rem 10%;
+        @include font-content($fs-sm);
+        .title{
+            @include font-title($fs-med);
+            margin-bottom: 1rem;
+        }
+        .meta{
+            margin-bottom: 1rem;
+        }
+        a{
+            position: absolute;
+            bottom: 1rem;
+        }
+    }
+}
+.intro{
+    display: none;
+}
