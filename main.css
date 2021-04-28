@@ -126,7 +126,7 @@ header .navigation a:hover, header .navigation a:focus {
 header .bottom-content {
   position: absolute;
   bottom: 2rem;
-  width: 70%;
+  width: 80%;
 }
 
 header .bottom-content .sub-text {
