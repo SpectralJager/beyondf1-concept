@@ -51,7 +51,7 @@ main{
     display: grid;
     grid-template-columns: auto;
     @media (min-width: 720px){
-        grid-template-columns: repeat(auto-fill,minmax(360px,1fr));
+        grid-template-columns: repeat(auto-fit,minmax(360px,1fr));
     }
 }
 a{
