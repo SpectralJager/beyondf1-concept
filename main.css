@@ -8,11 +8,20 @@
 body {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: minmax(360px, 1fr);
-      grid-template-columns: minmax(360px, 1fr);
+  -ms-grid-columns: minmax(350px, 1fr);
+      grid-template-columns: minmax(350px, 1fr);
+  max-width: 1980px;
+  margin: 0 auto;
 }
 
 @media (min-width: 720px) {
+  body {
+    -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1098px) {
   body {
     -ms-grid-columns: 360px auto;
         grid-template-columns: 360px auto;
@@ -28,8 +37,8 @@ main {
 
 @media (min-width: 720px) {
   main {
-    -ms-grid-columns: (minmax(360px, 1fr))[auto-fit];
-        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    -ms-grid-columns: (minmax(360px, 1fr))[auto-fill];
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   }
 }
 
@@ -47,6 +56,12 @@ a {
   border-radius: 0.3rem;
   font-size: 1rem;
   font-weight: 700;
+  -webkit-transition: background-color .2s linear;
+  transition: background-color .2s linear;
+}
+
+.btn:hover {
+  background-color: #D00000;
 }
 
 .font-red {
@@ -67,7 +82,7 @@ header {
 }
 
 header .title {
-  font-size: clamp(2rem, 50%, 4rem);
+  font-size: clamp(2rem, 100%, 4rem);
   font-weight: 700;
   margin-bottom: 2rem;
   text-transform: uppercase;
@@ -84,6 +99,23 @@ header .navigation {
   gap: 1rem;
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+header .navigation a {
+  display: inline-block;
+  background-color: transparent;
+  padding: .5rem 1rem;
+  border-radius: 0.5rem;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  -webkit-transition: all .4s linear;
+  transition: all .4s linear;
+}
+
+header .navigation a:hover {
+  background-color: #E63946;
+  -webkit-box-shadow: 3px 3px 10px #D00000;
+          box-shadow: 3px 3px 10px #D00000;
 }
 
 header .bottom-content {
@@ -110,7 +142,28 @@ header .bottom-content form #email {
   font-weight: 300;
   color: #F1FAEE;
   background: transparent;
-  outline: 0.5px solid #1D3557;
+  border: 0.5px solid #1D3557;
+  -webkit-transition: border .2s linear;
+  transition: border .2s linear;
+}
+
+header .bottom-content form #email:focus, header .bottom-content form #email:hover {
+  border: 0.5px solid #457B9D;
+  outline: none;
+}
+
+header .bottom-content form #email:active {
+  border: 0.5px solid #F1FAEE;
+  outline: none;
+}
+
+header .bottom-content form #email:invalid {
+  border: 0.5px solid #D00000;
+  outline: none;
+}
+
+header .bottom-content form #email:invalid + button {
+  color: #D00000;
 }
 
 header .bottom-content form button {
@@ -123,11 +176,21 @@ header .bottom-content form button {
   background: transparent;
   color: #F1FAEE;
   cursor: pointer;
+  -webkit-transition: color .2s linear;
+  transition: color .2s linear;
+}
+
+@media (min-width: 720px) {
+  header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+  }
 }
 
 .event {
   width: 100%;
-  height: 648px;
+  height: 600px;
 }
 
 .event__item {
@@ -140,6 +203,8 @@ header .bottom-content form button {
   background-blend-mode: multiply;
   color: #F1FAEE;
   padding: 1.5rem 10%;
+  -webkit-transition: all .3s linear;
+  transition: all .3s linear;
 }
 
 .event__item .title {
@@ -150,6 +215,7 @@ header .bottom-content form button {
 }
 
 .event__item .content {
+  height: 70%;
   display: -ms-grid;
   display: grid;
   -webkit-box-align: center;
@@ -166,10 +232,16 @@ header .bottom-content form button {
   text-align: center;
 }
 
+.event__item:hover {
+  background-color: #03071E;
+}
+
 .article {
   width: 100%;
-  height: 648px;
+  height: 600px;
   border: 1px solid #03071E;
+  -webkit-transition: all .3s linear;
+  transition: all .3s linear;
 }
 
 .article .img {
@@ -180,15 +252,19 @@ header .bottom-content form button {
   background-blend-mode: multiply;
   width: 100%;
   height: 50%;
+  -webkit-transition: height .3s linear;
+  transition: height .3s linear;
 }
 
 .article .content {
   position: relative;
   width: 100%;
   height: 50%;
-  padding: 1rem 10%;
+  padding: 5% 10%;
   font-size: 1rem;
   font-weight: 500;
+  -webkit-transition: all .3s linear;
+  transition: all .3s linear;
 }
 
 .article .content .title {
@@ -202,8 +278,28 @@ header .bottom-content form button {
 }
 
 .article .content a {
+  -webkit-transition: all .3s linear;
+  transition: all .3s linear;
   position: absolute;
-  bottom: 1rem;
+  bottom: 5%;
+}
+
+.article:hover {
+  background-color: #1D3557;
+}
+
+.article:hover .img {
+  height: 40%;
+}
+
+.article:hover .content {
+  padding-top: 10%;
+  color: #F1FAEE;
+  height: 60%;
+}
+
+.article:hover .content a {
+  bottom: 15%;
 }
 
 .intro {
