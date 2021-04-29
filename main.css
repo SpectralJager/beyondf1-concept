@@ -431,6 +431,7 @@ header .bottom-content .links svg:hover {
   font-size: 2rem;
   font-family: "Oswald";
   font-weight: 700;
+  margin-bottom: 2rem;
 }
 
 .races__list {
@@ -448,7 +449,6 @@ header .bottom-content .links svg:hover {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   gap: .6rem;
-  padding: 10% 0;
 }
 
 .races__list .race {
@@ -477,6 +477,7 @@ header .bottom-content .links svg:hover {
   width: 40%;
   height: 100%;
   padding-top: 2%;
+  border-left: 1px solid black;
 }
 
 .races__list .race .content > *:not(.img-flag) {
@@ -499,6 +500,7 @@ header .bottom-content .links svg:hover {
 .races__list .race .content .img-flag {
   width: 100%;
   height: 40%;
+  border-top: 1px solid black;
   background-image: url("/img/flag.png");
   background-color: none;
   background-position: center;
@@ -518,6 +520,62 @@ header .bottom-content .links svg:hover {
   font-family: "Oswald";
   font-weight: 700;
   text-align: center;
+  margin-bottom: 2rem;
+}
+
+.teams__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-preferred-size: 300px;
+      flex-basis: 300px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1rem;
+}
+
+.teams__list .team {
+  background-color: black;
+  width: 300px;
+  height: 200px;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.teams__list .team .content {
+  width: 50%;
+  height: 100%;
+  padding: 5% 7%;
+}
+
+.teams__list .team .content .name {
+  font-size: 1.5rem;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: .5rem;
+}
+
+.teams__list .team .content .discription {
+  font-size: 1rem;
+  font-family: "Lato";
+  font-weight: 200;
+  margin-bottom: .3rem;
+  font-weight: 300;
+}
+
+.teams__list .team .princ {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50%;
 }
 
 .intro {
