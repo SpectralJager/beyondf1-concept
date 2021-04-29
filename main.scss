@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Open+Sans:wght@300;400;700;800&family=Oswald:wght@300;400;500;700&display=swap');
 //colors
 $prussian-blue: #1D3557;
+$prussian-blue-dark: #192F4D;
 $celadon-blue: #457B9D;
 $powder-blue: #A8DADC;
 $honeydew: #F1FAEE;
@@ -301,11 +302,79 @@ header{
             text-align: center
         }
         .tech{
-            @include bg-img('/img/tech-bg.jpg', $powder-blue);
+            @include bg-img('/img/tech-bg.jpg', $prussian-blue);
         }
         .score{
-            @include bg-img('/img/results.jpg', gray);
+            @include bg-img('/img/results.jpg', $celadon-blue);
         }
+    }
+}
+.races{
+    width: 100%;
+    padding: 5% 10%;
+    .title{
+        text-align: center;
+        @include font-title($fs-big);
+
+    }
+    &__list{
+        display: flex;
+        //grid-template-columns: repeat(auto-fit, 270px);
+        justify-content: center;
+        flex-basis: 270px;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .6rem;
+        padding: 10% 0;
+        .race{
+            width: 270px;
+            height: 125px;
+            background-color: $rosso-corsa;
+            @include font-content($fs-sm);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid black;
+            display: flex;
+            .img-track{
+                width: 60%;
+                height: 100%;
+                padding: 5%;
+                background-color: white;
+            }
+            .content{
+                width: 40%;
+                height: 100%;
+                padding-top: 2%;
+                > *:not(.img-flag){
+                    padding-left: 5%;
+                }
+                .gp{
+                    text-transform: uppercase;
+                }
+                .track{
+                    font-weight: 300;
+                }
+                .id{
+                    color: $honeydew;
+                    font-weight: 700;
+                }
+                .img-flag{
+                    width: 100%;
+                    height: 40%;
+                    @include bg-img('/img/flag.png', none);
+                }
+            }
+        }
+    }
+}
+
+.teams{
+    background: linear-gradient($prussian-blue, $prussian-blue-dark);
+    color: $honeydew;
+    padding: 5% 10%;
+    .title{
+        @include font-title($fs-big);
+        text-align: center;
     }
 }
 

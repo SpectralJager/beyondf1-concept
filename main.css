@@ -407,7 +407,7 @@ header .bottom-content .links svg:hover {
 
 .info .container .tech {
   background-image: url("/img/tech-bg.jpg");
-  background-color: #A8DADC;
+  background-color: #1D3557;
   background-position: center;
   background-size: cover;
   background-blend-mode: multiply;
@@ -415,10 +415,109 @@ header .bottom-content .links svg:hover {
 
 .info .container .score {
   background-image: url("/img/results.jpg");
-  background-color: gray;
+  background-color: #457B9D;
   background-position: center;
   background-size: cover;
   background-blend-mode: multiply;
+}
+
+.races {
+  width: 100%;
+  padding: 5% 10%;
+}
+
+.races .title {
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Oswald";
+  font-weight: 700;
+}
+
+.races__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-preferred-size: 270px;
+      flex-basis: 270px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: .6rem;
+  padding: 10% 0;
+}
+
+.races__list .race {
+  width: 270px;
+  height: 125px;
+  background-color: #D00000;
+  font-size: 1rem;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.races__list .race .img-track {
+  width: 60%;
+  height: 100%;
+  padding: 5%;
+  background-color: white;
+}
+
+.races__list .race .content {
+  width: 40%;
+  height: 100%;
+  padding-top: 2%;
+}
+
+.races__list .race .content > *:not(.img-flag) {
+  padding-left: 5%;
+}
+
+.races__list .race .content .gp {
+  text-transform: uppercase;
+}
+
+.races__list .race .content .track {
+  font-weight: 300;
+}
+
+.races__list .race .content .id {
+  color: #F1FAEE;
+  font-weight: 700;
+}
+
+.races__list .race .content .img-flag {
+  width: 100%;
+  height: 40%;
+  background-image: url("/img/flag.png");
+  background-color: none;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+
+.teams {
+  background: -webkit-gradient(linear, left top, left bottom, from(#1D3557), to(#192F4D));
+  background: linear-gradient(#1D3557, #192F4D);
+  color: #F1FAEE;
+  padding: 5% 10%;
+}
+
+.teams .title {
+  font-size: 2rem;
+  font-family: "Oswald";
+  font-weight: 700;
+  text-align: center;
 }
 
 .intro {
