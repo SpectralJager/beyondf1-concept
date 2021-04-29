@@ -17,18 +17,21 @@ $fs-sm: 1rem;
 // mixins
 @mixin font-title($size){
     font-size: $size;
+    line-height: $size*1.3;
     font-family: "Oswald";
     font-weight: 700;
 }
 @mixin font-content($size){
     font-size: $size;
+    line-height: $size*1.3;
     font-family: 'Open Sans';
     font-weight: 400;
 }
 @mixin font-discription($size){
     font-size: $size;
+    line-height: $size*1.3;
     font-family: "Lato";
-    font-weight: 200;
+    font-weight: 300;
 }
 @mixin bg-img($img, $color) {
     background-image: url($img);
@@ -53,17 +56,17 @@ body{
     grid-template-columns: minmax(350px,1fr);
     max-width: 1980px;
     margin: 0 auto;
-    @media (min-width: 720px){
+    @media screen and (min-width: 720px){
         grid-template-columns: repeat(2,1fr);
     }
-    @media (min-width: 1098px){
+    @media screen and (min-width: 1080px){
         grid-template-columns: 360px auto;
     }
 }
 .home{
     display: grid;
     grid-template-columns: auto;
-    @media (min-width: 720px){
+    @media screen and (min-width: 720px){
         grid-template-columns: repeat(auto-fill,minmax(360px,1fr));
     }
 }
@@ -183,7 +186,7 @@ header{
             }
         }
     }
-    @media (min-width: 720px){
+    @media screen and (min-width: 720px){
         position: sticky;
         top:0;
     }
@@ -284,15 +287,21 @@ header{
             height: 80%;
             justify-content: space-between;
             align-items: center;
-            gap: 10%;
+            width: 100%;
             @include font-content($fs-sm);
+            p{
+                width: 50%;
+            }
+            .meta{
+                width: 40%;
+            }
         }
     }
     .container{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
         .extra{
             height: 150px;
+            width: 50%;
             color: $honeydew;
             padding: 5% 10%;
             display: flex;
@@ -306,6 +315,24 @@ header{
         }
         .score{
             @include bg-img('/img/results.jpg', $celadon-blue);
+        }
+    }
+    @media screen and (min-width: 1080px) {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        .season{
+            height: 450px;
+            .content{
+                font-size: $fs-med;
+            }
+        }
+        .container{
+            height: 450px;
+            flex-direction: column;
+            .extra{
+                width: 100%;
+                height: 50%;
+            }
         }
     }
 }
@@ -415,6 +442,32 @@ header{
                 width: 50%;
             }
         }
+    }
+}
+.wiki-articles{
+    @extend .home;
+}
+.article-read{
+    .read{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 80%;
+        margin: 0 auto;
+        padding: 3rem 0;
+        .title{
+            @include font-title($fs-big);
+        }
+        .meta, .source{
+            @include font-discription($fs-sm);
+        }
+        .text{
+            @include font-content($fs-sm);
+        }
+    }
+    @media screen and (min-width:1080px){
+        display: grid;
+        grid-template-columns: auto 360px;
     }
 }
 
