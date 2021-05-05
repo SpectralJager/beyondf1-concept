@@ -1,17 +1,21 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
-
+# config
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dev.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
+admin = Admin(app, name='BeyondF1', template_mode='bootstrap3')
+# db models
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.String(512), nullable=True)
@@ -27,6 +31,8 @@ class News(db.Model):
         self.domain = domain
         self.source = source
 
+admin.add_views(ModelView(News,db.session))
+# external classes
 class NewsCrawler():
     headers ={
         'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0',
