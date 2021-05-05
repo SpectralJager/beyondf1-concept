@@ -1,4 +1,5 @@
 from beyondf1 import NewsCrawler
 
-n = NewsCrawler()
-n.formula1Check()
+
+craw = NewsCrawler()
+craw.updateNews()
