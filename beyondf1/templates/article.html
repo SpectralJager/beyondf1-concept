@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+
+
+{% from 'macro/_card-gen.html' import article_gen %}
+{% block content %}
+<main class="article-read">
+    <section class="read">
+        <h1 class="title">{{ article.title }}</h1>
+        <p class="meta">{{ article.date }}</p>
+        <p class="text">{{ article.text | safe }}</p>
+        <p class="source">{{ article.source }}</p>
+    </section>
+    <section class="articles">
+    {% for article_rec in articles %}
+        {{ article_gen(article_rec) }}
+    {% endfor %}
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,29 @@
+@mixin font-title($size){
+    font-size: $size;
+    line-height: $size*1.3;
+    font-family: "Oswald";
+    font-weight: 700;
+}
+@mixin font-content($size){
+    font-size: $size;
+    line-height: $size*1.3;
+    font-family: 'Open Sans';
+    font-weight: 400;
+}
+@mixin font-discription($size){
+    font-size: $size;
+    line-height: $size*1.3;
+    font-family: "Lato";
+    font-weight: 300;
+}
+@mixin bg-img($img, $color) {
+    background-image: $img;
+    background-color: $color;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
+}
+@mixin card {
+    width: 100%;
+    height: 600px;
+}

@@ -1,0 +1,33 @@
+//imports
+@import 'fonts/font';
+@import 'colors/colors';
+@import 'mixins/_mixin';
+@import 'components/additional', 'components/header', 'components/article-list', 'components/article', 'components/wiki';
+//scss
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    display: grid;
+    grid-template-columns: minmax(350px,1fr);
+    max-width: 1980px;
+    margin: 0 auto;
+    @media screen and (min-width: 720px){
+        grid-template-columns: repeat(2,1fr);
+    }
+    @media screen and (min-width: 1080px){
+        grid-template-columns: 360px auto;
+    }
+}
+.home{
+    display: grid;
+    grid-template-columns: auto;
+    @media screen and (min-width: 720px){
+        grid-template-columns: repeat(auto-fill,minmax(360px,1fr));
+    }
+}
+.intro{
+    display: none;
+}

@@ -1,0 +1,27 @@
+a{
+    text-decoration: none;
+    color: inherit;
+}
+.btn{
+    display: inline-block;
+    padding: 0.3rem 0.7rem;
+    margin: .5rem 0;
+    background: linear-gradient($imperial-red, $rosso-corsa);
+    color: $honeydew;
+    border-radius: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all .2s linear;
+    &:hover, &:focus{
+        background: linear-gradient($rosso-corsa, $dark-red);
+    }
+}
+.font-red{
+    color: $imperial-red;
+}
+.disabled-link{
+    cursor: default;
+    pointer-events: none;        
+    text-decoration: none;
+    color: grey;
+}
