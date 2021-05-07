@@ -27,6 +27,9 @@ header{
                 box-shadow: 3px 3px 10px $rosso-corsa;
             }
         }
+        a:not(.disabled-link){
+            color: inherit;
+        }
     }
     .bottom-content{
         position: absolute;

@@ -1,4 +1,5 @@
 import flask_sqlalchemy
+from datetime import datetime
 
 db = flask_sqlalchemy.SQLAlchemy()
 
@@ -18,3 +19,18 @@ class Admin(db.Model):
         return '[#] User: %r' % self.username
 
 
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), unique=True)
+    text = db.Column(db.String())
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    bg_url = db.Column(db.String())
+    domain = db.Column(db.String(64))
+    source = db.Column(db.String())
+
+    def __init__(self,title,text,bg_url,domain,source):
+        self.title = title
+        self.text = text
+        self.bg_url = bg_url
+        self.domain = domain
+        self.source = source

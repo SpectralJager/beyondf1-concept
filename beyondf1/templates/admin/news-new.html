@@ -1,0 +1,33 @@
+{% extends 'admin/admin-layout.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <form class="bg-dark text-light col-md-6 offset-md-3 p-4" method="POST">
+            <h2>Add new News</h2>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="domain" class="form-label">Domain</label>
+                <input type="text" class="form-control" name="domain">
+            </div>
+            <div class="mb-3">
+                <label for="source" class="form-label">Source</label>
+                <input type="text" class="form-control" name="source">
+            </div>
+            <div class="mb-3">
+                <label for="bg_url" class="form-label">Bg url</label>
+                <input type="text" class="form-control" name="bg_url" value="img/news-img.jpg">
+            </div>
+            <div class="mb-3">
+                <label for="text" class="form-label">Text</label>
+                <textarea name="text" id="editor" cols="30" rows="10"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

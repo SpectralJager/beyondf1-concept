@@ -9,7 +9,7 @@
         <h1 class="title">{{ article.title }}</h1>
         <p class="meta">{{ article.date }}</p>
         <p class="text">{{ article.text | safe }}</p>
-        <p class="source">{{ article.source }}</p>
+        <a href='{{article.source}}' class="source">{{ article.domain }}</a>
     </section>
     <section class="articles">
     {% for article_rec in articles %}

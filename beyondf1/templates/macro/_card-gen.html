@@ -1,6 +1,6 @@
 {% macro event_gen(events) %}
 <div class="event">
-    <div class="event__item" style="--bg-img: url('{{url_for('static', filename=events[0].bg_url)}}')">
+    <div class="event__item" style="--bg-img: url('{{events[0].bg_url}}')">
         <h2 class="title">{{ events[0].title }}</h2>
         <div class="content">
             <p class="decription">{{ events[0].description }}</p>
@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="event__item" style="--bg-img: url('{{url_for('static', filename=events[0].bg_url)}}')">
+    <div class="event__item" style="--bg-img: url('{{events[0].bg_url}}')">
         <h2 class="title">{{ events[1].title }}</h2>
         <div class="content">
             <p class="decription">{{ events[1].description }}</p>
@@ -25,11 +25,11 @@
 
 {% macro article_gen(article) %}
 <div class="article">
-        <div class="img" style="--bg-img: url('{{url_for('static', filename=article.bg_url)}}')"></div>
+        <div class="img" style="--bg-img: url('{{article.bg_url}}')"></div>
         <div class="content">
             <h2 class="title">{{ article.title }}</h2>
             <p class="meta">{{ article.date }}</p>
-            <p class="text">{{ article.text[:128] | safe }}</p>
+            <p class="text">{{ article.text[:100] | safe }}...</p>
             <a href="/articles/{{ article.id }}" class="btn">Read more</a>
         </div>
     </div>
