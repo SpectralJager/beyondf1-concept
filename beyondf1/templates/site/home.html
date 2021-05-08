@@ -3,7 +3,6 @@
 {% from 'macro/_card-gen.html' import event_gen, article_gen %}
 {% block content %}
 <main class="home">
-    {{ event_gen(events) }}
     {% for article in articles %}
         {{ article_gen(article) }}
     {% endfor %}

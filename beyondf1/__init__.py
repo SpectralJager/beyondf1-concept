@@ -1,6 +1,7 @@
 import flask, flask_migrate
 from beyondf1.models import db
-from beyondf1.views import bp
+from beyondf1.site_views import site
+from beyondf1.admin_views import admin
 
 def create_app(test_config=None):
     app = flask.Flask(__name__)
@@ -11,7 +12,8 @@ def create_app(test_config=None):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     #### extensions and blueprints
-    app.register_blueprint(bp)
+    app.register_blueprint(site)
+    app.register_blueprint(admin)
     register_extensions(app)
 
     return app

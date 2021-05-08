@@ -1,9 +1,9 @@
 from flask import render_template, Blueprint, request, session, flash, redirect, url_for
 from hashlib import sha512
-from beyondf1.models import *
 from functools import wraps
-
-
+from beyondf1.models import *
+#### blueprint
+admin = Blueprint('admin', __name__, url_prefix='/admin', template_folder='templates/admin')
 #### decorators
 def is_loggin(f):
     @wraps(f)
@@ -12,47 +12,10 @@ def is_loggin(f):
             return f(*argc, **kwargs)
         else:
             flash('You need loggin!', 'danger')
-            return redirect(url_for('view.login'))
+            return redirect(url_for('admin.login'))
     return wrap
-#### blueprints
-bp = Blueprint('view',__name__)
-
-#### dev models
-class Event():
-    title = "Lorem impsum"
-    description = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo odit voluptas praesentium tempore quisquam nihil sint eveniet vero eligendi est!"
-    date = '18:00 01.02.20'
-    bg_url = "/static/img/gp-bg.jpg"
-
-class dev_Article():
-    title = "Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-    text = "Sunt aute ut consectetur nostrud non mollit do elit Lorem sit consequat aute proident do. Cillum fugiat nostrud dolor elit do sint esse ex quis mollit ullamco. Anim labore et consectetur id aliqua ea aliqua ipsum. Laborum ex non sunt eu consequat Lorem minim ea velit veniam sunt nostrud nulla consectetur. Velit in sint aliqua est mollit aliqua consequat culpa excepteur veniam. Ad aliqua et consequat minim consequat velit nisi ut velit elit exercitation ea magna id.\nEnim mollit exercitation ut nostrud ut do in cupidatat commodo. Labore commodo adipisicing in enim. Culpa elit consectetur laboris aute dolore culpa ex aute. Laborum ullamco incididunt ea adipisicing aute excepteur commodo tempor laborum qui nisi labore consequat duis. Ut magna mollit laborum in sint nisi commodo proident nostrud et voluptate dolore qui nostrud.\n"
-    date = '18:00 01.02.20'
-    bg_url = "img/news-img.jpg"
-    source = "beyondf1.com"
-    def __init__(self, id):
-        self.id = id
-
-events = [Event(), Event()]
-dev_articles = [ dev_Article(i) for i in range(3)]
-
-
 #### routes
-@bp.route('/')
-def home():
-    articles = Article.query.all()
-    return render_template('home.html', events=events, articles=articles)
-
-@bp.route('/articles/<int:id>/')
-def article(id):
-    article = Article.query.get(id)
-    return render_template('article.html', article=article, articles=dev_articles[:2])
-
-@bp.route('/wiki')
-def wiki():
-    return render_template('wiki.html')
-
-@bp.route('/admin/register', methods=['GET', 'POST'])
+@admin.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -65,11 +28,11 @@ def register():
         db.session.add(admin)
         db.session.commit()
         flash('Account created!', 'success')
-        return redirect(url_for('view.login'))
+        return redirect(url_for('admin.login'))
         
-    return render_template('admin/register.html')
+    return render_template('/register.html')
 
-@bp.route('/admin/login', methods=['GET', 'POST'])
+@admin.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -82,32 +45,32 @@ def login():
             session['username'] = admin.username
 
             flash('You are logged!', 'success')
-            return redirect(url_for('view.panel'))
+            return redirect(url_for('admin.panel'))
         else:
             flash('Incorect data!', 'danger')
-            return redirect(url_for('view.login'))
+            return redirect(url_for('admin.login'))
 
-    return render_template('admin/login.html')
+    return render_template('/login.html')
 
-@bp.route('/admin/logout')
+@admin.route('/logout')
 def logout():
     session.clear()
     flash('You are logout!', 'success')
-    return redirect(url_for('view.login'))
+    return redirect(url_for('admin.login'))
 
-@bp.route('/admin')
+@admin.route('/')
 @is_loggin
 def panel():
-    return render_template('admin/panel.html')
+    return render_template('/panel.html')
 
 ## Users manipulations
-@bp.route('/admin/users')
+@admin.route('/users')
 @is_loggin
 def users():
-    users = Admin.query.all()
-    return render_template('admin/users.html', users=users)
+    users = Admin.query.order_by(Admin.id.desc())
+    return render_template('/users.html', users=users)
 
-@bp.route('/admin/users/delete/<int:id>')
+@admin.route('/users/delete/<int:id>')
 @is_loggin
 def user_delete(id):
     user = Admin.query.get(id)
@@ -115,10 +78,10 @@ def user_delete(id):
     db.session.commit()
 
     flash('User\'ve been deleted', 'success')
-    return redirect(url_for('view.users'))
+    return redirect(url_for('admin.users'))
 
 
-@bp.route('/admin/users/edit/<int:id>', methods=['GET', 'POST'])
+@admin.route('/users/edit/<int:id>', methods=['GET', 'POST'])
 @is_loggin
 def user_edit(id):
     user = Admin.query.get(id)
@@ -131,11 +94,11 @@ def user_edit(id):
         db.session.commit()
         session.clear()
         flash('Account updated!', 'success')
-        return redirect(url_for('view.login'))
+        return redirect(url_for('admin.login'))
 
-    return render_template('admin/users-edit.html', user=user)
+    return render_template('/users-edit.html', user=user)
 
-@bp.route('/admin/users/add-new', methods=['GET', 'POST'])
+@admin.route('/users/add-new', methods=['GET', 'POST'])
 def new_user():
     if request.method == 'POST':
         username = request.form['username']
@@ -148,17 +111,17 @@ def new_user():
         db.session.add(admin)
         db.session.commit()
         flash('User created!', 'success')
-        return redirect(url_for('view.users'))
+        return redirect(url_for('admin.users'))
         
-    return render_template('admin/register.html')
+    return render_template('/register.html')
 ## News manipulations
-@bp.route('/admin/news')
+@admin.route('/news')
 @is_loggin
 def news():
-    news = Article.query.all()
-    return render_template('admin/news.html', news=news)
+    news = Article.query.order_by(Article.id.desc())
+    return render_template('/news.html', news=news)
 
-@bp.route('/admin/news/delete/<int:id>')
+@admin.route('/news/delete/<int:id>')
 @is_loggin
 def news_delete(id):
     news = Article.query.get(id)
@@ -166,9 +129,9 @@ def news_delete(id):
     db.session.commit()
 
     flash('News\'ve been deleted', 'success')
-    return redirect(url_for('view.news'))
+    return redirect(url_for('admin.news'))
 
-@bp.route('/admin/news/add-new', methods=['GET', 'POST'])
+@admin.route('/news/add-new', methods=['GET', 'POST'])
 def new_article():
     if request.method == 'POST':
         title = request.form['title']
@@ -182,11 +145,11 @@ def new_article():
         db.session.add(news)
         db.session.commit()
         flash('News created!', 'success')
-        return redirect(url_for('view.news'))
+        return redirect(url_for('admin.news'))
         
     return render_template('admin/news-new.html')
 
-@bp.route('/admin/news/edit/<int:id>', methods=['GET', 'POST'])
+@admin.route('/news/edit/<int:id>', methods=['GET', 'POST'])
 def edit_article(id):
     article = Article.query.get(id)
     if request.method == 'POST':
@@ -199,6 +162,6 @@ def edit_article(id):
         db.session.commit()
 
         flash('News updated!', 'success')
-        return redirect(url_for('view.news'))
+        return redirect(url_for('admin.news'))
         
-    return render_template('admin/news-edit.html', article=article)
+    return render_template('/news-edit.html', article=article)
