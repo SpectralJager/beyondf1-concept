@@ -19,15 +19,15 @@ export default {
     },
     methods: {
         async fetchNews(){
-            const url = 'http://127.0.0.1:5000/api_v1/news';
+            const url = 'http://192.168.0.106:5000/api_v1/news';
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',
                 cache: 'no-cache',
-                credentials: 'same-origin',
                 dataType: 'json',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Origin': 'http://127.0.0.1'
                 },
             })
             .then(response => response.json())

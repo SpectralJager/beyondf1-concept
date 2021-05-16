@@ -7,6 +7,7 @@ api_v1 = Blueprint('api_v1', __name__, url_prefix='/api_v1')
 # news api
 @api_v1.route('/news', methods=['GET', 'POST'])
 def news():
+    print('get request')
     response = {'message': 'Incorect request method!'}
     if request.method == 'GET':
         articles = Article.query.order_by(Article.id.desc()).all()
