@@ -9,7 +9,7 @@ api_v1 = Blueprint('api_v1', __name__, url_prefix='/api_v1')
 def news():
     response = {'message': 'Incorect request method!'}
     if request.method == 'GET':
-        articles = Article.query.all()
+        articles = Article.query.order_by(Article.id.desc()).all()
         if articles:
             response = {
                 'articles': [article.json() for article in articles],

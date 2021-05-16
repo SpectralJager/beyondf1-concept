@@ -1,6 +1,6 @@
 <template>
-<main class="home" v-show="showArticles">
-    <ArticleListItem />
+<main class="home" v-if="showArticle">
+    <ArticleListItem v-for="article in articles" :key="article.id" :article="article"/>
 </main>
 </template>
 
@@ -14,15 +14,29 @@ export default {
     data() {
         return {
             articles: {},
-            showArticle: false,
+            showArticle: true,
         }
     },
     methods: {
-        fetchArticles() {
-            console.log('fetching articles from api')
-            return {}
+        async fetchNews(){
+            const url = 'http://127.0.0.1:5000/api_v1/news';
+            await fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                dataType: 'json',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => this.articles = data.articles);
         }
     },
+    mounted() {
+        this.fetchNews();
+    }
 }
 </script>
 

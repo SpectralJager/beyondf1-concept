@@ -3,11 +3,10 @@
     <div class="img" :style="'--bg-img: url('+ article.bg_url + ');'"></div>
     <div class="content">
         <h2 class="title">{{ article.title }}</h2>
-        <p class="meta">{{ article.date }}</p>
-        <div class="text">
-            
+        <p class="meta">{{ article.published_date }}</p>
+        <div class="text" v-html="prev_text">
         </div>
-        <a :href="'/articles/' + article.id" class="btn">Read more</a>
+        <div class="btn-wrapper"><router-link :to="'/articles/' + article.id">Read more</router-link></div>
     </div>
 </div> 
 </template>
@@ -16,10 +15,11 @@
 export default {
     props: {
         article: Object,
+    },
+    data(){
+        return {
+            prev_text: this.article.text.slice(0,100) + '...',
+        }
     }
 }
 </script>
-
-<style>
-
-</style>

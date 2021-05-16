@@ -1,6 +1,7 @@
 <template>
 <Header />
 <ArticleList />
+
 </template>
 
 <script>
@@ -14,3 +15,4 @@ export default {
     }
 }
 </script>
+

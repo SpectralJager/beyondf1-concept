@@ -1,6 +1,7 @@
 .header--home{
     width: 100%;
-    height: 768px;
+    //height: 768px;
+    height: 100vh;
     @include bg-img(var(--bg-img), $prussian-blue);
     color: $honeydew;
     padding: 4rem 10% 0 10%;

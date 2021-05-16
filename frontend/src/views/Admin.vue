@@ -1,17 +1,13 @@
 <template>
-<header class="header--admin">
-    <div class="logo"><span>Admin Panel</span></div>
-    <nav class="navbar">
-        <span class="navbar--link" @click="showNews">
-            News
-        </span>
-    </nav>
-    <News v-if="fl_news" :news="news" />
-</header>
+<Header />
+<main class="admin">
+<News v-if="fl_news" :news="news" />
+</main>
 </template>
 
 <script>
 import News from '@/components/admin/News.vue';
+import Header from '@/components/admin/Header.vue';
 export default {
     data() {
         return{
@@ -42,11 +38,8 @@ export default {
     },
     components: {
         News,
+        Header,
     }
 
 }
 </script>
-
-<style>
-
-</style>
