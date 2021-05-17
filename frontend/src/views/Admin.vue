@@ -1,17 +1,28 @@
 <template>
-<Header />
+<Header :is_logged="is_logged"/>
 <main class="admin">
-<News v-if="fl_news" :news="news" />
+    <seciton v-if="is_logged">
+        <News v-if="fl_news" :news="news" />
+        <CreateNewAdmin v-elif="fl_newAdmin"/>
+        <Statistic v-elif="fl_statistic" />
+        <
+    </seciton>
+    <section v-else>
+        <Login />
+    </section>
 </main>
 </template>
 
 <script>
 import News from '@/components/admin/News.vue';
 import Header from '@/components/admin/Header.vue';
+import Login from '@/components/admin/Login.vue';
+
 export default {
     data() {
         return{
             fl_news: false,
+            is_logged: false,
             news: [],
         }
     },
@@ -20,7 +31,7 @@ export default {
             this.fetchNews();
         },
         async fetchNews(){
-            const url = 'http://192.168.0.106:5000/api_v1/news';
+            const url = 'http://127.0.0.1:5000/api_v1/news';
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',
@@ -39,6 +50,7 @@ export default {
     components: {
         News,
         Header,
+        Login
     }
 
 }

@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 db = SQLAlchemy()
+secret_key = b'Some_supsdlfahskleajr;lkfajs;ldkfhna;sjkfdahsldkfjnaskljh29883rfhsahljk'
 
 
 class Admin(db.Model):

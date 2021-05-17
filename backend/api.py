@@ -1,8 +1,64 @@
-from .models import Article, db
+import re
+from .models import Article, Admin, db, secret_key
 from flask import Blueprint, request, jsonify, make_response
-import sys
+from hashlib import sha512
+import jwt, re
 
+# api blueprints
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api_v1')
+
+
+# auth api
+@api_v1.route('/auth/login', methods=['POST'])
+def auth_login():
+    # get login data from site
+    username = request.json['username']
+    password = request.json['password']
+    # hash password
+    password = sha512(bytes(password.encode('utf-8'))).digest()
+    # get admin by username
+    admin = Admin.query.filter_by(username=username).first()
+
+    if admin and password == admin.password:
+        # if data correct, create token and confirm login
+        response = {
+            'message': 'Correct data, happy hacking!',
+            'jwt': jwt.encode({'username': admin.username}, secret_key, algorithm="HS256")
+        }
+    else:
+        response = {
+            'message': 'Data incorect or missing!'
+        }
+    return make_response(response, 200)
+
+@api_v1.route('/auth/register', methods=['POST'])
+def auth_register():
+    # get register data
+    username = request.json['username']
+    email = request.json['email']
+    password = request.json['password']
+    password = sha512(bytes(password.encode('utf-8'))).digest()
+
+    # check if we have Admin with same username and email
+    if Admin.query.filter_by(username = username).first() == None and Admin.query.filter_by(email = email).first() == None:
+        # create new Admin
+        admin = Admin(username, email, password)
+        # save new admin in database
+        db.session.add(admin)
+        db.session.commit()
+        response = {
+            'message': 'You have registered'
+        }
+    else:
+        response = {
+            'message': 'Incorect data!'
+        }
+
+
+    return make_response(response, 200)
+            
+
+    
 
 # news api
 @api_v1.route('/news', methods=['GET', 'POST'])
@@ -64,7 +120,6 @@ def news_id(id):
                 'message': 'Article with title %r have deleted!' % title, 
             }
     except Exception as e:
-        #e = sys.exc_info()[0]
         print(e)
         response = {'message': 'Incorect request!'}
     return jsonify(response)
