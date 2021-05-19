@@ -1,6 +1,5 @@
-import flask, flask_migrate
-from .models import db, secret_key
-from .api import api_v1
+import flask 
+from .api import api_v1, secret_key
 from flask_cors import CORS
 
 def create_app(test_config=None):
@@ -19,6 +18,4 @@ def create_app(test_config=None):
 
 
 def register_extensions(app):
-    db.init_app(app)
-    migrate = flask_migrate.Migrate(app,db)
     CORS(app)
