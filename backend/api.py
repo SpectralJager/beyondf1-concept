@@ -19,7 +19,7 @@ def connectToDatabase():
         )
         cursor = connection.cursor()
         return cursor, connection
-    except (Exception, Error) as e:
+    except Exception as e:
         print("[#] Error with connection to PostgreSQL!\n", e)
         return None
 
@@ -195,4 +195,121 @@ def subscribers_del():
             'message': 'Invalid data!',
             'code': 'danger'
         }
+    return make_response(response, 200)
+
+# articles manipulation
+@api_v1.route('/news', methods=['GET','POST'])
+def news():
+    if request.method == 'POST':
+        article = {
+            'title': request.json['title'],
+            'content': request.json['content'],
+            'image_url': request.json['image_url'],
+            'created_date': str(datetime.datetime.utcnow())
+        }
+        cursor, connection = connectToDatabase()
+        try:
+            cursor.execute('INSERT INTO article (title,content,image_url,created_date) VALUES (%r,%r,%r,%r);' % (article['title'],article['content'],article['image_url'],article['created_date']))
+            connection.commit()
+            response = {
+                'message': 'Article with title %r have added!' % article['title'],
+                'code': 'success'
+            }
+        except Exception as e:
+            print('[#] Something goes wrong\n %r' % e)
+            response = {
+                'message': 'Invalid data!',
+                'code': 'danger'
+            }
+    elif request.method == 'GET':
+        n = 8
+        p = (request.args.get('page', type=int)) - 1
+        cursor, connection = connectToDatabase()
+        try:
+            cursor.execute("SELECT * FROM article LIMIT {} OFFSET {}".format(n,n*p))
+            articles = cursor.fetchall()
+            articles = [
+                {   
+                    'id': i[0],
+                    'title': i[1],
+                    'content': i[2],
+                    'created_date': i[3],
+                    'image_url': i[4]
+                }
+                for i in articles
+            ]
+            response = {
+                'articles': articles,
+                'message': f'Articles from {n*p} to {n*p+n}',
+                'code': 'success'
+            }
+        except Exception as e:
+            print('[#] Something goes wrong\n %r' % e)
+            response = {
+                'message': 'Invalid data!',
+                'code': 'danger'
+            }
+    return make_response(response, 200)
+
+@api_v1.route('/news/<int:id>', methods=['PUT', 'GET', 'DELETE'])
+def news_by_id(id):
+    if request.method == 'PUT':
+        article = {
+            'id': id,
+            'title': request.json['title'],
+            'content': request.json['content'],
+            'image_url': request.json['image_url'],
+        }
+        cursor, connection = connectToDatabase()
+        try:
+            cursor.execute('UPDATE article set title = %r, content = %r, image_url = %r WHERE id = %d' % (article['title'], article['content'], article['image_url'], int(id)))
+            connection.commit()
+            response = {
+                'message': 'Article with id = %d updated' % int(id),
+                'code': 'success'
+            }
+        except Exception as e:
+            print('[#] Something goes wrong\n %r' % e)
+            response = {
+                'message': 'Invalid data!',
+                'code': 'danger'
+            }
+    elif request.method == 'GET':
+        cursor, connection = connectToDatabase()
+        try:
+            cursor.execute("SELECT * FROM article WHERE id = {}".format(int(id)))
+            article = cursor.fetchone()
+            article = {   
+                'id': article[0],
+                'title': article[1],
+                'content': article[2],
+                'created_date': article[3],
+                'image_url': article[4]
+            }
+            response = {
+                'article': article,
+                'message': 'Articles with id = %d' % int(id),
+                'code': 'success'
+            }
+        except Exception as e:
+            print('[#] Something goes wrong\n %r' % e)
+            response = {
+                'message': 'Invalid data!',
+                'code': 'danger'
+            }
+    if request.method == 'DELETE':
+        cursor, connection = connectToDatabase()
+        try:
+            cursor.execute('DELETE FROM article where id = %d' % int(id))
+            connection.commit()
+            response = {
+                'message': 'Article with id = %d deleted' % id,
+                'code': 'success'
+            }
+        except Exception as e:
+            print('[#] Something goes wrong\n %r' % e)
+            response = {
+                'message': 'Invalid data!',
+                'code': 'danger'
+            }
     return make_response(response, 200)
