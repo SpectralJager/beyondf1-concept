@@ -3,8 +3,8 @@
     <h1 class="title">Beyond<span class='font-red'>F1</span></h1>
     <nav class='navigation'>
         <router-link to="/">Home</router-link>
-        <router-link to="/wiki" class='disabled-link'>Wiki</router-link>
-        <router-link to="/contacts" class='disabled-link'>Contacts</router-link>
+        <a to="/wiki" class='disabled-link'>Wiki</a>
+        <a to="/contacts" class='disabled-link'>Contacts</a>
     </nav>
     <div class="bottom-content">
         <span class="sub-text">Subscribe for updates</span>
@@ -15,7 +15,7 @@
         <div class="links">
             <i class="fab fa-linkedin"></i>
             <i class="fab fa-github-square"></i>
-            <i class="fab fa-codepen"></i>
+            <i class="fab fa-twitter-square"></i>
         </div>
     </div>
 </header>

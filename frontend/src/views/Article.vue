@@ -5,10 +5,9 @@
         <h1 class="title">{{ article.title }}</h1>
         <p class="meta">{{ article.published_date }}</p>
         <p class="text" v-html="article.text"></p>
-        <a :href="article.source" class="source">{{ article.domain }}</a>
     </section>
     <section class="articles">
-        some articles
+        articles
     </section>
 </main>
 </template>
@@ -30,19 +29,18 @@ export default {
     },
     methods: {
         async fetchNews(){
-            const url = 'http://192.168.0.106:5000/api_v1/news/' + this.id;
+            const url = 'http://127.0.0.1:8000/api/v1/article/' + this.id + '/';
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',
                 cache: 'no-cache',
-                credentials: 'same-origin',
                 dataType: 'json',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
             })
             .then(response => response.json())
-            .then(data => this.article = data.article);
+            .then(data => this.article = data);
         }
     },
     mounted() {
