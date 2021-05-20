@@ -3,7 +3,6 @@
     <h1 class="title">Beyond<span class='font-red'>F1</span></h1>
     <nav class='navigation'>
         <router-link to="/">Home</router-link>
-        <router-link to="/wiki" class='disabled-link'>Wiki</router-link>
         <router-link to="/contacts" class='disabled-link'>Contacts</router-link>
     </nav>
     <div class="bottom-content">

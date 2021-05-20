@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         async fetchNews(){
-            const url = 'http://192.168.0.106:5000/api_v1/news';
+            const url = window.url + '/news';
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',

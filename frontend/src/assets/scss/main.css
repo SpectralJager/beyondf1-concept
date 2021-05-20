@@ -768,6 +768,16 @@ a {
   overflow-y: auto;
 }
 
+.login-form {
+  position: static;
+  background: none;
+  width: clamp(360px, 100vw, 100%);
+}
+
+.login-form .form {
+  place-self: start center;
+}
+
 * {
   margin: 0;
   padding: 0;

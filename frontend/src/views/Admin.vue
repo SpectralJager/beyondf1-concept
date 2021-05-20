@@ -3,9 +3,6 @@
 <main class="admin">
     <seciton v-if="is_logged">
         <News v-if="fl_news" :news="news" />
-        <CreateNewAdmin v-elif="fl_newAdmin"/>
-        <Statistic v-elif="fl_statistic" />
-        <
     </seciton>
     <section v-else>
         <Login />
@@ -24,6 +21,7 @@ export default {
             fl_news: false,
             is_logged: false,
             news: [],
+            jwt: '',
         }
     },
     methods: {
@@ -31,7 +29,7 @@ export default {
             this.fetchNews();
         },
         async fetchNews(){
-            const url = 'http://127.0.0.1:5000/api_v1/news';
+            const url = window.url + '/news';
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',
@@ -45,6 +43,16 @@ export default {
             .then(response => response.json())
             .then(data => this.news = data.articles);
             this.fl_news = true;
+        }
+    },
+    watch: {
+        jwt(newJwt, oldJwt) {
+            if(newJwt != ''){
+                this.is_logged = true;
+            }
+            else{
+                this.is_logged = false;
+            }
         }
     },
     components: {

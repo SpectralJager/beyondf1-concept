@@ -11,20 +11,12 @@
                 <input type="text" v-model="article.title">
             </div>
             <div class="form--group">
-                <label for="domain">Domain</label>
-                <input type="text" v-model="article.domain">
-            </div>
-            <div class="form--group">
-                <label for="source">Source</label>
-                <input type="text" v-model="article.source">
-            </div>
-            <div class="form--group">
-                <label for="bg_url">Background image url</label>
-                <input type="text" v-model="article.bg_url">
+                <label for="image_url">Background image url</label>
+                <input type="text" v-model="article.image_url">
             </div>
             <div class="form--group">
                 <!--<label for="text">Text</label>-->
-                <ckeditor :editor="editor" v-model="article.text" tag-name="textarea"></ckeditor>
+                <ckeditor :editor="editor" v-model="article.content" tag-name="textarea"></ckeditor>
             </div>
         </div>
         <div class="form--footer">
@@ -54,17 +46,14 @@ export default {
         hideForm(){
             this.$parent.edit_article = {
                 title: '',
-                domain: '',
-                source: '',
-                bg_url: '',
-                text: '',
+                image_url: '',
+                content: '',
             };
             this.$parent.fl_form = false;
             this.$parent.is_editing = false;
         },
         async saveForm(){
-            console.log(this.article);
-            let url = 'http://192.168.0.106:5000/api_v1/news';
+            let url = window.url + '/news';
             if(this.is_editing){
                 url = url + "/" + this.article.id;
                 console.log(url);
@@ -82,7 +71,6 @@ export default {
                 .then(data => console.log(data.message));
             }
             else{
-                console.log(url);
                 await fetch(url, {
                     method: 'POST',
                     mode: 'cors',
@@ -98,10 +86,8 @@ export default {
             }
             this.$parent.edit_article = {
                 title: '',
-                domain: '',
-                source: '',
-                bg_url: '',
-                text: '',
+                image_url: '',
+                content: '',
             };
             this.$parent.fl_form = false;
             this.$parent.is_editing = false;

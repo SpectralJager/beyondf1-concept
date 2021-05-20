@@ -24,12 +24,11 @@ def connectToDatabase():
         return None
 
 # auth api
-@api_v1.route('/auth/check_token', methods=['POST'])
-def check_token():
+def check_token(token):
     try:
-        decode_token = jwt.decode(request.json['token'], secret_key, algorithms=['HS256'])
+        decode_token = jwt.decode(token, secret_key, algorithms=['HS256'])
         response = {
-            'message': 'Valid token!',
+            'message': 'Token valid!',
             'code': 'success'
         }
     except jwt.ExpiredSignatureError:
@@ -42,7 +41,7 @@ def check_token():
             'message': 'Token Invalid!',
             'code': 'danger'
         }
-    return make_response(response, 200)
+    return response
 
 @api_v1.route('/auth/login', methods=['POST'])
 def auth_login():
@@ -60,7 +59,7 @@ def auth_login():
         # if data correct, create token and confirm login
         response = {
             'message': 'Correct data, happy hacking!',
-            'jwt': jwt.encode({'username': admin[1], 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=10)}, secret_key, algorithm="HS256", ),
+            'jwt': jwt.encode({'username': admin[1], 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)}, secret_key, algorithm="HS256", ),
             'code': 'success'
         }
     else:
@@ -72,15 +71,18 @@ def auth_login():
 
 @api_v1.route('/auth/register', methods=['POST'])
 def auth_register():
-    # get register data
-    username = request.json['username']
-    email = request.json['email']
-    password = request.json['password']
-    password = sha512(bytes(password.encode('utf-8'))).hexdigest()
-    # get acces to db
-    cursor, connection = connectToDatabase()
-    # check is availiable username
     try:
+        response = check_token(request.json['jwt'])
+        if response['code'] != 'success':
+            return make_response(response, 200)
+        # get register data
+        username = request.json['username']
+        email = request.json['email']
+        password = request.json['password']
+        password = sha512(bytes(password.encode('utf-8'))).hexdigest()
+        # get acces to db
+        cursor, connection = connectToDatabase()
+        # check is availiable username
         cursor.execute("SELECT * FROM admins WHERE username = %r" % username)
         username_res = cursor.fetchone()
         # check is availiable email
@@ -111,23 +113,20 @@ def auth_register():
     
 @api_v1.route('/auth', methods=['PUT','DELETE'])
 def auth_delete():
-    cursor, connection = connectToDatabase()
-    id = request.json['id']
-    if request.method == 'DELETE':
-        try:
+    try:
+        response = check_token(request.json['jwt'])
+        if response['code'] != 'success':
+            return make_response(response, 200)
+        cursor, connection = connectToDatabase()
+        id = request.json['id']
+        if request.method == 'DELETE':
             cursor.execute('DELETE FROM admins where id = %d' % int(id))
             connection.commit()
             response = {
                 'message': 'Admin deleted',
                 'code': 'success'
             }
-        except:
-            response = {
-                'message': 'Invalid data!',
-                'code': 'danger'
-            }
-    elif request.method == 'PUT':
-        try:
+        elif request.method == 'PUT':
             admin = {
                 'username': request.json['username'],
                 'email': request.json['email'],
@@ -139,51 +138,55 @@ def auth_delete():
                 'message': 'Admin updated',
                 'code': 'success'
             }
-        except:
-            response = {
-                'message': 'Invalid data',
-                'code': 'danger'
-            }
+    except:
+        response = {
+            'message': 'Invalid data',
+            'code': 'danger'
+        }
     return make_response(response, 200)
 
 # subscribers
 @api_v1.route('/subscribers', methods=["GET","POST"])
 def subscribers():
-    response = {'message': '1'}
-    cursor, connection = connectToDatabase()
-    if request.method == 'POST':
-        email = request.json['email']
-        try:
+    try:
+        cursor, connection = connectToDatabase()
+        if request.method == 'POST':
+            email = request.json['email']
             cursor.execute('INSERT INTO subscribers ( email) VALUES ( %r );' % email)
             connection.commit()
             response = {
                 'message': 'New subscriber added!',
                 'code': 'success'
             }
-        except:
+        elif request.method == 'GET':
+            response = check_token(request.json['jwt'])
+            if response['code'] != 'success':
+                return make_response(response, 200)
+            cursor.execute("SELECT email FROM subscribers;")
+            res = cursor.fetchall()
+            res = [{
+                'email': i[0]
+            } for i in res]
             response = {
-                'message': 'Incorect data!',
-                'code': 'danger'
+                'message': 'List of subscribers!',
+                'subscribers': res,
+                'code': 'success'
             }
-
-    elif request.method == 'GET':
-        cursor.execute("SELECT email FROM subscribers;")
-        res = cursor.fetchall()
-        res = [{
-            'email': i[0]
-        } for i in res]
+    except:
         response = {
-            'message': 'List of subscribers!',
-            'subscribers': res,
-            'code': 'success'
-        }
+            'message': 'Incorect data!',
+            'code': 'danger'
+    }
     return make_response(response, 200)
 
 @api_v1.route('/subscribers/delete', methods=['DELETE'])
 def subscribers_del():
-    cursor, connection = connectToDatabase()
-    id = request.json['id']
     try:
+        response = check_token(request.json['jwt'])
+        if response['code'] != 'success':
+            return make_response(response, 200)
+        cursor, connection = connectToDatabase()
+        id = request.json['id']
         cursor.execute('DELETE FROM subscribers where id = %d' % int(id))
         connection.commit()
         response = {
@@ -200,32 +203,28 @@ def subscribers_del():
 # articles manipulation
 @api_v1.route('/news', methods=['GET','POST'])
 def news():
-    if request.method == 'POST':
-        article = {
-            'title': request.json['title'],
-            'content': request.json['content'],
-            'image_url': request.json['image_url'],
-            'created_date': str(datetime.datetime.utcnow())
-        }
-        cursor, connection = connectToDatabase()
-        try:
+    try:
+        if request.method == 'POST':
+            response = check_token(request.json['jwt'])
+            if response['code'] != 'success':
+                return make_response(response, 200)
+            article = {
+                'title': request.json['title'],
+                'content': request.json['content'],
+                'image_url': request.json['image_url'],
+                'created_date': str(datetime.datetime.utcnow())
+            }
+            cursor, connection = connectToDatabase()
             cursor.execute('INSERT INTO article (title,content,image_url,created_date) VALUES (%r,%r,%r,%r);' % (article['title'],article['content'],article['image_url'],article['created_date']))
             connection.commit()
             response = {
                 'message': 'Article with title %r have added!' % article['title'],
                 'code': 'success'
             }
-        except Exception as e:
-            print('[#] Something goes wrong\n %r' % e)
-            response = {
-                'message': 'Invalid data!',
-                'code': 'danger'
-            }
-    elif request.method == 'GET':
-        n = 8
-        p = (request.args.get('page', type=int)) - 1
-        cursor, connection = connectToDatabase()
-        try:
+        elif request.method == 'GET':
+            n = 8
+            p = (request.args.get('page', type=int)) - 1
+            cursor, connection = connectToDatabase()
             cursor.execute("SELECT * FROM article LIMIT {} OFFSET {}".format(n,n*p))
             articles = cursor.fetchall()
             articles = [
@@ -243,40 +242,36 @@ def news():
                 'message': f'Articles from {n*p} to {n*p+n}',
                 'code': 'success'
             }
-        except Exception as e:
-            print('[#] Something goes wrong\n %r' % e)
-            response = {
-                'message': 'Invalid data!',
-                'code': 'danger'
-            }
+    except Exception as e:
+        print('[#] Something goes wrong\n %r' % e)
+        response = {
+            'message': 'Invalid data!',
+            'code': 'danger'
+        }
     return make_response(response, 200)
 
 @api_v1.route('/news/<int:id>', methods=['PUT', 'GET', 'DELETE'])
 def news_by_id(id):
-    if request.method == 'PUT':
-        article = {
-            'id': id,
-            'title': request.json['title'],
-            'content': request.json['content'],
-            'image_url': request.json['image_url'],
-        }
-        cursor, connection = connectToDatabase()
-        try:
+    try:
+        if request.method == 'PUT':
+            response = check_token(request.json['jwt'])
+            if response['code'] != 'success':
+                return make_response(response, 200)
+            article = {
+                'id': id,
+                'title': request.json['title'],
+                'content': request.json['content'],
+                'image_url': request.json['image_url'],
+            }
+            cursor, connection = connectToDatabase()
             cursor.execute('UPDATE article set title = %r, content = %r, image_url = %r WHERE id = %d' % (article['title'], article['content'], article['image_url'], int(id)))
             connection.commit()
             response = {
                 'message': 'Article with id = %d updated' % int(id),
                 'code': 'success'
             }
-        except Exception as e:
-            print('[#] Something goes wrong\n %r' % e)
-            response = {
-                'message': 'Invalid data!',
-                'code': 'danger'
-            }
-    elif request.method == 'GET':
-        cursor, connection = connectToDatabase()
-        try:
+        elif request.method == 'GET':
+            cursor, connection = connectToDatabase()
             cursor.execute("SELECT * FROM article WHERE id = {}".format(int(id)))
             article = cursor.fetchone()
             article = {   
@@ -291,25 +286,21 @@ def news_by_id(id):
                 'message': 'Articles with id = %d' % int(id),
                 'code': 'success'
             }
-        except Exception as e:
-            print('[#] Something goes wrong\n %r' % e)
-            response = {
-                'message': 'Invalid data!',
-                'code': 'danger'
-            }
-    if request.method == 'DELETE':
-        cursor, connection = connectToDatabase()
-        try:
+        if request.method == 'DELETE':
+            response = check_token(request.json['jwt'])
+            if response['code'] != 'success':
+                return make_response(response, 200)
+            cursor, connection = connectToDatabase()
             cursor.execute('DELETE FROM article where id = %d' % int(id))
             connection.commit()
             response = {
                 'message': 'Article with id = %d deleted' % id,
                 'code': 'success'
             }
-        except Exception as e:
-            print('[#] Something goes wrong\n %r' % e)
-            response = {
-                'message': 'Invalid data!',
-                'code': 'danger'
-            }
+    except Exception as e:
+        print('[#] Something goes wrong\n %r' % e)
+        response = {
+            'message': 'Invalid data!',
+            'code': 'danger'
+        }
     return make_response(response, 200)
