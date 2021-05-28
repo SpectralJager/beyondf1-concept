@@ -1,4 +1,4 @@
-module github.com/SpectralJager/beyondf1/backend
+module beyondf1/backend
 
 go 1.16
 

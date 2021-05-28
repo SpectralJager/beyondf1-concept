@@ -1,13 +1,14 @@
 package v1
 
 import (
-	data "beyondf1/backend/data"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
+
+	data "beyondf1/backend/data"
 
 	"github.com/gorilla/mux"
 )
