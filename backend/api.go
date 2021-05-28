@@ -25,4 +25,7 @@ func api_v1(mul *mux.Router, prefix string) {
 	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.PutArticle).Methods("PUT", "OPTIONS")
 	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.DeleteArticle).Methods("DELETE", "OPTIONS")
 	// admins api
+	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/login"), v1.Login).Methods("POST", "OPTIONS")
+	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/admin/create"), v1.CreateAdmin).Methods("POST", "OPTIONS")
+	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/admin/delete"), v1.DeleteAdmin).Methods("DELETE", "OPTIONS")
 }
