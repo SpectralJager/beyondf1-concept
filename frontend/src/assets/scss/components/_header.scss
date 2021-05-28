@@ -2,6 +2,7 @@
     width: 100%;
     //height: 768px;
     height: 100vh;
+    min-height: 768px;
     @include bg-img(var(--bg-img), $prussian-blue);
     color: $honeydew;
     padding: 4rem 10% 0 10%;

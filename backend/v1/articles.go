@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"data"
+	data "beyondf1/backend/data"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -29,8 +29,10 @@ func SetArticle(w http.ResponseWriter, r *http.Request) {
 	// set response headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		return
+	}
 	// fetch data from site
 	var article Article
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -62,8 +64,10 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		return
+	}
 	// get id from url
 	id := mux.Vars(r)["id"]
 	// fetch data from db
@@ -88,8 +92,10 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		return
+	}
 	// fetch data from db
 	sql_statement := `select * from article order by created_date desc;`
 	rows, err := db.Query(sql_statement)
@@ -118,8 +124,10 @@ func GetArticlesByTag(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		return
+	}
 	// get id from url
 	tag := mux.Vars(r)["tag"]
 	// fetch data from db
@@ -150,8 +158,10 @@ func PutArticle(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		return
+	}
 	// get id from url
 	id := mux.Vars(r)["id"]
 	// fetch data from db
@@ -187,8 +197,10 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		return
+	}
 	// get id from url
 	id := mux.Vars(r)["id"]
 	// fetch data from db
