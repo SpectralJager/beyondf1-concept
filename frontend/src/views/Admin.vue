@@ -29,7 +29,7 @@ export default {
             this.fetchNews();
         },
         async fetchNews(){
-            const url = window.url + '/news';
+            const url = window.url + '/articles';
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',

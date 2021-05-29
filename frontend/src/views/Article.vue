@@ -3,8 +3,8 @@
 <main class="article-read">
     <section class="read">
         <h1 class="title">{{ article.title }}</h1>
-        <p class="meta">{{ article.published_date }}</p>
-        <p class="text" v-html="article.text"></p>
+        <p class="meta">{{ Date(article.date) }}</p>
+        <p class="text" v-html="article.content"></p>
         <a :href="article.source" class="source">{{ article.domain }}</a>
     </section>
     <section class="articles">
@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         async fetchNews(){
-            const url = 'http://192.168.0.106:5000/api_v1/news/' + this.id;
+            const url = window.url + '/articles/id=' + this.id;
             await fetch(url, {
                 method: 'GET',
                 mode: 'cors',

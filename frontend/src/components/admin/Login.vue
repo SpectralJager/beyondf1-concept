@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         async submiteForm(){
-            const url = window.url + '/auth/login';
+            const url = window.url + '/login';
             console.log(url);
             await fetch(url, {
                 method: 'POST',
@@ -48,9 +48,13 @@ export default {
             })
             .then(response => response.json())
             .then((data) => {
+                console.log(data)
                 this.admin.username = '';
                 this.admin.password = '';
-                this.$parent.jwt = data.jwt;
+                var header = new Headers();
+                token = header.get("Token");
+                console.log(token);
+                this.$parent.jwt = token;
             });
         }
     }

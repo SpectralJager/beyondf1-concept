@@ -10,6 +10,7 @@ import (
 
 	data "beyondf1/backend/data"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 )
 
@@ -34,28 +35,47 @@ func SetArticle(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		return
 	}
-	// fetch data from site
-	var article Article
-	reqBody, err := ioutil.ReadAll(r.Body)
-	json.Unmarshal(reqBody, &article)
-	if err != nil {
-		fmt.Println("[#] Cant decode request json!")
-		json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
-		log.Println(err)
-		return
+	if r.Header["Token"] != nil {
+		token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("cant pars token")
+			}
+			return MySigningKey, nil
+		})
+		if err != nil {
+			log.Println(err)
+			w.Header().Set("Token", "")
+			json.NewEncoder(w).Encode(map[string]string{"message": "unauthorized"})
+		}
+		if token.Valid {
+			// fetch data from site
+			var article Article
+			reqBody, err := ioutil.ReadAll(r.Body)
+			json.Unmarshal(reqBody, &article)
+			if err != nil {
+				fmt.Println("[#] Cant decode request json!")
+				json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
+				log.Println(err)
+				return
+			}
+			sql_statement := `insert into article (title, content, created_date, image_url, source, tag) values ($1, $2, $3, $4, $5, $6);`
+			_, err = db.Exec(
+				sql_statement,
+				article.Title, article.Content, time.Now(), article.Image_url, article.Source, article.Tag,
+			)
+			if err != nil {
+				fmt.Println("[#] Cant insert data to database!")
+				json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
+				log.Println(err)
+				return
+			}
+			json.NewEncoder(w).Encode(map[string]string{"message": fmt.Sprintf("New article created! Title: %s", article.Title)})
+		}
+	} else {
+		log.Println("not authorized access")
+		json.NewEncoder(w).Encode(map[string]string{"message": "unauthorized"})
 	}
-	sql_statement := `insert into article (title, content, created_date, image_url, source, tag) values ($1, $2, $3, $4, $5, $6);`
-	_, err = db.Exec(
-		sql_statement,
-		article.Title, article.Content, time.Now(), article.Image_url, article.Source, article.Tag,
-	)
-	if err != nil {
-		fmt.Println("[#] Cant insert data to database!")
-		json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
-		log.Println(err)
-		return
-	}
-	json.NewEncoder(w).Encode(map[string]string{"message": fmt.Sprintf("New article created! Title: %s", article.Title)})
+
 }
 
 func GetArticle(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +103,7 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//fmt.Println(user)
-	json.NewEncoder(w).Encode(article)
+	json.NewEncoder(w).Encode(map[string]Article{"article": article})
 }
 
 func GetArticles(w http.ResponseWriter, r *http.Request) {
@@ -115,7 +135,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 		}
 		articles = append(articles, article)
 	}
-	json.NewEncoder(w).Encode(articles)
+	json.NewEncoder(w).Encode(map[string][]Article{"articles": articles})
 }
 
 func GetArticlesByTag(w http.ResponseWriter, r *http.Request) {
@@ -149,7 +169,7 @@ func GetArticlesByTag(w http.ResponseWriter, r *http.Request) {
 		}
 		articles = append(articles, article)
 	}
-	json.NewEncoder(w).Encode(articles)
+	json.NewEncoder(w).Encode(map[string][]Article{"articles": articles})
 }
 
 func PutArticle(w http.ResponseWriter, r *http.Request) {
@@ -163,32 +183,49 @@ func PutArticle(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		return
 	}
-	// get id from url
-	id := mux.Vars(r)["id"]
-	// fetch data from db
-	var article Article
-	reqBody, err := ioutil.ReadAll(r.Body)
-	json.Unmarshal(reqBody, &article)
-	fmt.Println(article)
-	if err != nil {
-		fmt.Println("[#] Cant decode request json!")
-		json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
-		log.Println(err)
-		return
+	if r.Header["Token"] != nil {
+		token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("cant pars token")
+			}
+			return MySigningKey, nil
+		})
+		if err != nil {
+			log.Println(err)
+			w.Header().Set("Token", "")
+			json.NewEncoder(w).Encode(map[string]string{"message": "unauthorized"})
+		}
+		if token.Valid {
+			// get id from url
+			id := mux.Vars(r)["id"]
+			// fetch data from db
+			var article Article
+			reqBody, err := ioutil.ReadAll(r.Body)
+			json.Unmarshal(reqBody, &article)
+			fmt.Println(article)
+			if err != nil {
+				fmt.Println("[#] Cant decode request json!")
+				json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
+				log.Println(err)
+				return
+			}
+			sql_statement := `update article set title=$1, content=$2, image_url=$3, source=$4, tag=$5 where id=$6;`
+			res, err := db.Exec(
+				sql_statement,
+				article.Title, article.Content, article.Image_url, article.Source, article.Tag, id,
+			)
+			rows_affected, _ := res.RowsAffected()
+			if err != nil || rows_affected == 0 {
+				fmt.Println("[#] Cant update data!")
+				json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
+				log.Println(err)
+				return
+			}
+			json.NewEncoder(w).Encode(map[string]string{"message": "Data updated! Article updated."})
+		}
+	} else {
+		json.NewEncoder(w).Encode(map[string]string{"message": "unauthorized"})
 	}
-	sql_statement := `update article set title=$1, content=$2, image_url=$3, source=$4, tag=$5 where id=$6;`
-	res, err := db.Exec(
-		sql_statement,
-		article.Title, article.Content, article.Image_url, article.Source, article.Tag, id,
-	)
-	rows_affected, _ := res.RowsAffected()
-	if err != nil || rows_affected == 0 {
-		fmt.Println("[#] Cant update data!")
-		json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
-		log.Println(err)
-		return
-	}
-	json.NewEncoder(w).Encode(map[string]string{"message": "Data updated! Article updated."})
 }
 
 func DeleteArticle(w http.ResponseWriter, r *http.Request) {
@@ -202,17 +239,35 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		return
 	}
-	// get id from url
-	id := mux.Vars(r)["id"]
-	// fetch data from db
-	sql_statement := `delete from article where id=$1;`
-	res, err := db.Exec(sql_statement, id)
-	rows_affected, _ := res.RowsAffected()
-	if err != nil || rows_affected == 0 {
-		fmt.Println("[#] Cant delete data!")
-		json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
-		log.Println(err)
-		return
+	if r.Header["Token"] != nil {
+		token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("cant pars token")
+			}
+			return MySigningKey, nil
+		})
+		if err != nil {
+			log.Println(err)
+			w.Header().Set("Token", "")
+			json.NewEncoder(w).Encode(map[string]string{"message": "unauthorized"})
+		}
+		if token.Valid {
+			// get id from url
+			id := mux.Vars(r)["id"]
+			// fetch data from db
+			sql_statement := `delete from article where id=$1;`
+			res, err := db.Exec(sql_statement, id)
+			rows_affected, _ := res.RowsAffected()
+			if err != nil || rows_affected == 0 {
+				fmt.Println("[#] Cant delete data!")
+				json.NewEncoder(w).Encode(map[string]string{"message": "Data incorect or mising!"})
+				log.Println(err)
+				return
+			}
+			json.NewEncoder(w).Encode(map[string]string{"message": "Data updated! Article deleted."})
+		}
+	} else {
+		json.NewEncoder(w).Encode(map[string]string{"message": "unauthorized"})
 	}
-	json.NewEncoder(w).Encode(map[string]string{"message": "Data updated! Article deleted."})
+
 }
