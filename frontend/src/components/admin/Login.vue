@@ -48,13 +48,11 @@ export default {
             })
             .then(response => response.json())
             .then((data) => {
-                console.log(data)
                 this.admin.username = '';
                 this.admin.password = '';
-                var header = new Headers();
-                token = header.get("Token");
-                console.log(token);
-                this.$parent.jwt = token;
+                if data.code == "success"{
+                    this.$parent.jwt = data.token;
+                }
             });
         }
     }
