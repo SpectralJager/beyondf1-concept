@@ -42,16 +42,16 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Connect to db
+
 	fmt.Println("[#] Hit endpoint: Logout")
-	/*cookie := &http.Cookie{
+	cookie := &http.Cookie{
 		Name:     "Token",
 		Value:    "",
 		Path:     "/",
 		HttpOnly: true,
 		MaxAge:   -1,
 	}
-	http.SetCookie(w, cookie)*/
-	w.Header().Set("Token", "")
+	http.SetCookie(w, cookie)
 	json.NewEncoder(w).Encode(map[string]string{"message": "You are log out!", "code": "success"})
 }
 
@@ -98,15 +98,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	/*cookie := &http.Cookie{
+	cookie := &http.Cookie{
 		Name:     "Token",
 		Value:    token,
 		Path:     "/",
 		HttpOnly: true,
 		Expires:  time.Now().Add(time.Hour * 10),
 	}
-	http.SetCookie(w, cookie)*/
-	w.Header().Add("Token", token)
+	http.SetCookie(w, cookie)
 	json.NewEncoder(w).Encode(map[string]string{"message": "You are login in!", "code": "success"})
 }
 

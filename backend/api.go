@@ -19,14 +19,14 @@ func CreateServer() {
 func api_v1(mul *mux.Router, prefix string) {
 	// articles api
 	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles"), v1.GetArticles).Methods("GET", "OPTIONS")
-	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles"), v1.SetArticle).Methods("POST", "OPTIONS")
 	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles/tag={tag}"), v1.GetArticlesByTag).Methods("GET", "OPTIONS")
 	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.GetArticle).Methods("GET", "OPTIONS")
-	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.PutArticle).Methods("PUT", "OPTIONS")
-	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.DeleteArticle).Methods("DELETE", "OPTIONS")
-	// admins api
 	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/login"), v1.Login).Methods("POST", "OPTIONS")
-	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/logout"), v1.Logout).Methods("GET", "OPTIONS")
-	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/admin/create"), v1.CreateAdmin).Methods("POST", "OPTIONS")
-	mul.HandleFunc(fmt.Sprintf("%s%s", prefix, "/admin/delete"), v1.DeleteAdmin).Methods("DELETE", "OPTIONS")
+	// admins api
+	mul.Handle(fmt.Sprintf("%s%s", prefix, "/articles"), v1.IsAuth(v1.SetArticle)).Methods("POST", "OPTIONS")
+	mul.Handle(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.IsAuth(v1.PutArticle)).Methods("PUT", "OPTIONS")
+	mul.Handle(fmt.Sprintf("%s%s", prefix, "/articles/id={id}"), v1.IsAuth(v1.DeleteArticle)).Methods("DELETE", "OPTIONS")
+	mul.Handle(fmt.Sprintf("%s%s", prefix, "/logout"), v1.IsAuth(v1.Logout)).Methods("GET", "OPTIONS")
+	mul.Handle(fmt.Sprintf("%s%s", prefix, "/admin/create"), v1.IsAuth(v1.CreateAdmin)).Methods("POST", "OPTIONS")
+	mul.Handle(fmt.Sprintf("%s%s", prefix, "/admin/delete"), v1.IsAuth(v1.DeleteAdmin)).Methods("DELETE", "OPTIONS")
 }
