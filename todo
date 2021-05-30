@@ -1,0 +1,32 @@
++ Create server
++ Create router
++ Create CORS middleware
++ Create AUTH middleware
++ Create Database
++ Create Database connection
++ Create admin table
+- Create API for admin {
+    - post login
+    - get logout (auth)
+    - post create admin (auth)
+    - delete admin (auth)
+    - put admin (auth)
+}
+- Create article table
+- Create Api for articles {
+    - get article 
+    - get slice of articles
+    - get slice of articles by tag
+    - post article ( auth )
+    - put article (auth)
+    - delete article (auth)
+}
+- Create subscriber table
+- Creat Api for subscribers {
+    - post new subscriber
+    - get send updates to subscriber
+    - delete subscriber(auth)
+}
+- Create SSH/TSL connection
+- Deploy to heroku
+
