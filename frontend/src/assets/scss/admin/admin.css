@@ -1,0 +1,15 @@
+nav {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.registration {
+  width: 100vw;
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+  place-items: center center;
+}
+/*# sourceMappingURL=admin.css.map */

@@ -1,0 +1,179 @@
+.info{
+    .season{
+        width: 100%;
+        height: 300px;
+        color: $honeydew;
+        padding: 5% 10%;
+        @include bg-img('/img/seasons-bg.png', gray);
+        .title{
+            @include font-title($fs-big);
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            
+        }
+        .content{
+            display: flex;
+            height: 80%;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            @include font-content($fs-sm);
+            p{
+                width: 50%;
+            }
+            .meta{
+                width: 40%;
+            }
+        }
+    }
+    .container{
+        display: flex;
+        .extra{
+            height: 150px;
+            width: 50%;
+            color: $honeydew;
+            padding: 5% 10%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            text-align: center
+        }
+        .tech{
+            @include bg-img('/img/tech-bg.jpg', $prussian-blue);
+        }
+        .score{
+            @include bg-img('/img/results.jpg', $celadon-blue);
+        }
+    }
+    @media screen and (min-width: 1080px) {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        .season{
+            height: 450px;
+            .content{
+                font-size: $fs-med;
+            }
+        }
+        .container{
+            height: 450px;
+            flex-direction: column;
+            .extra{
+                width: 100%;
+                height: 50%;
+            }
+        }
+    }
+}
+.races{
+    width: 100%;
+    padding: 5% 10%;
+    .title{
+        text-align: center;
+        @include font-title($fs-big);
+        margin-bottom: 2rem;
+
+    }
+    &__list{
+        display: flex;
+        //grid-template-columns: repeat(auto-fit, 270px);
+        justify-content: center;
+        flex-basis: 270px;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .6rem;
+        .race{
+            width: 270px;
+            height: 125px;
+            background-color: $rosso-corsa;
+            @include font-content($fs-sm);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid black;
+            display: flex;
+            .img-track{
+                width: 60%;
+                height: 100%;
+                padding: 5%;
+                background-color: white;
+            }
+            .content{
+                width: 40%;
+                height: 100%;
+                padding-top: 2%;
+                border-left: 1px solid black;
+                > *:not(.img-flag){
+                    padding-left: 5%;
+                }
+                .gp{
+                    text-transform: uppercase;
+                }
+                .track{
+                    font-weight: 300;
+                }
+                .id{
+                    color: $honeydew;
+                    font-weight: 700;
+                }
+                .img-flag{
+                    width: 100%;
+                    height: 40%;
+                    border-top: 1px solid black;
+                    @include bg-img('/img/flag.png', none);
+                }
+            }
+        }
+    }
+}
+
+.teams{
+    background: linear-gradient($prussian-blue, $prussian-blue-dark);
+    color: $honeydew;
+    padding: 5% 10%;
+    .title{
+        @include font-title($fs-big);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    &__list{
+        display: flex;
+        flex-wrap: wrap;
+        flex-basis: 300px;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        .team{
+            background-color: black;
+            width: 300px;
+            height: 200px;
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+            .content{
+                width: 50%;
+                height: 100%;
+                padding: 5% 7%;
+                .name{
+                    @include font-content($fs-med);
+                    text-align: center;
+                    margin-bottom: .5rem;
+                }
+                .discription{
+                    @include font-discription($fs-sm);
+                    margin-bottom: .3rem;
+                    font-weight: 300;
+                }
+            }
+            .princ{
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 50%;
+            }
+        }
+    }
+}
+.wiki-articles{
+    @extend .home;
+}
